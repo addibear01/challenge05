@@ -1,17 +1,23 @@
 require "csv"
 CSV.foreach(Rails.root.join('db', 'products.csv'), headers: true) do |row|
-  Product.create(name: row['name'], description: row['description'], price: row['price'], stock_quantity: row['stock_quantity'])
+  Product.create(
+    title: row['name'],
+    description: row['description'],
+    price: row['price'],
+    stock_quantity: row['stock quantity'],
+    category: Category.find_or_create_by(name: row['category'])
+  )
 end
 
-# Rails.application.routes.draw do
-#   get 'products/show'
-#   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-#   resources :products, only: [:index, :show]
-#   root to: 'products#index'
-#   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-#   # Can be used by load balancers and uptime monitors to verify that the app is live.
-#   get "up" => "rails/health#show", as: :rails_health_check
+Rails.application.routes.draw do
+  get 'products/show'
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :products, only: [:index, :show]
+  root to: 'products#index'
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
 
-#   # Defines the root path route ("/")
-#   # root "posts#index"
-# end
+  # Defines the root path route ("/")
+  # root "posts#index"
+end
