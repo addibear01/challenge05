@@ -7,13 +7,16 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-require 'faker'
+# Clear existing records
+Product.destroy_all
+Category.destroy_all
 
-676.times do
-  Product.create(
-    title: Faker::Commerce.product_name,
-    description: Faker::Lorem.sentence,
-    price: Faker::Commerce.price,
-    stock_quantity: Faker::Number.within(range: 1..100)
-  )
-end
+# Create some categories
+electronics = Category.create!(name: "Electronics")
+furniture = Category.create!(name: "Furniture")
+
+# Create some products and associate them with categories
+Product.create!(title: "Smartphone", description: "A high-end smartphone", price: 699.99, stock_quantity: 50, category: electronics)
+Product.create!(title: "Laptop", description: "A powerful laptop", price: 999.99, stock_quantity: 30, category: electronics)
+Product.create!(title: "Chair", description: "A comfortable chair", price: 59.99, stock_quantity: 100, category: furniture)
+Product.create!(title: "Table", description: "A sturdy table", price: 129.99, stock_quantity: 20, category: furniture)
