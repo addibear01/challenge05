@@ -1,12 +1,22 @@
 <h1>Products</h1>
 <hr>
-<% @products.each do |product| %>
-  <div class="product">
-    <h2><%= product.category.name %></h2> 
-    <h3><%= product.title %></h3>
-    <p><%= product.description %></p>
-    <p><strong>Price:</strong> $<%= product.price %></p>
-    <p><strong>Stock:</strong> <%= product.stock_quantity %></p>
-    <hr>
-  </div>
-<% end %>
+
+<div class="products-container">
+  <% current_category = nil %>
+  <% @products.each do |product| %>
+    <% unless current_category == product.category.name %>
+      <% if current_category.present? %>
+        <hr class="category-divider">
+      <% end %>
+      <div class="category-section">
+        <h2 class="category-title"><%= product.category.name %></h2>
+      </div>
+      <% current_category = product.category.name %>
+    <% end %>
+    <div class="product-item">
+      <h3 class="product-title"><%= link_to product.title, product_path(product) %></h3>
+      <p><strong>Price:</strong> $<%= product.price %></p>
+      <hr>
+    </div>
+  <% end %>
+</div>

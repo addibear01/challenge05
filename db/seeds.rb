@@ -7,16 +7,25 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-# Clear existing records
+
+require 'csv'
+
 Product.destroy_all
 Category.destroy_all
 
-# Create some categories
-electronics = Category.create!(name: "Electronics")
-furniture = Category.create!(name: "Furniture")
+csv_file = Rails.root.join('db/products.csv')
+csv_data = File.read(csv_file)
 
-# Create some products and associate them with categories
-Product.create!(title: "Smartphone", description: "A high-end smartphone", price: 699.99, stock_quantity: 50, category: electronics)
-Product.create!(title: "Laptop", description: "A powerful laptop", price: 999.99, stock_quantity: 30, category: electronics)
-Product.create!(title: "Chair", description: "A comfortable chair", price: 59.99, stock_quantity: 100, category: furniture)
-Product.create!(title: "Table", description: "A sturdy table", price: 129.99, stock_quantity: 20, category: furniture)
+products = CSV.parse(csv_data, headers: true)
+
+products.each do |product|
+  category_name = product['category']
+  category = Category.find_or_create_by(name: category_name)
+
+  Product.create(
+    title: product['name'],
+    description: product['description'],
+    price: product['price'],
+    stock_quantity: product['stock quantity'],
+    category: category)
+end
